@@ -1,12 +1,9 @@
 # Advent of Code 2024 - Rust + WASM / Python bindings
 
-## Execute Binary
+## Development
 
-`cargo run --bin <day>_<part>`, e.g. `cargo run --bin 01_01`
+This year, I'll be trying to prototype solutions in Rust instead of in Python / Notebooks. `main.rs` is git-ignored but I use that as a scratchpad and can `cargo run` from the workspace level to execute that code. The configs in `.vscode/launch.json` enable setting breakpoints in `main.rs` or other files in `rust/src` and running in VSCode debug mode.
 
-## Breakpoint Debugging
+## Regression Tests
 
-This year, I'll be trying to prototype solutions in Rust instead of in Python / Notebooks. 
-
-Breakpoint debugging: see `.vscode/launch.json` for configs. With the `rust-analyzer` and `CodeLLDB` extensions, I can set breakpoints in any of the `rust/` files, select a binary in `rust/src/bin/` and use `Run -> Start Debugging` to launch the program with breakpoints.
-
+One goal this year is to embrace Rust's `fearless refactoring` paradigm. To that end, once code is working I'll add a regression test to `tests/solutions.rs`. Those can be run with `cargo test` from the workspace level.

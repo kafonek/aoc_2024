@@ -4,11 +4,10 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug binary",
+            "name": "Debug main",
             "cargo": {
                 "args": [
-                    "build",
-                    "--bin=${fileBasenameNoExtension}"
+                    "build"
                 ]
             },
             "args": [],
