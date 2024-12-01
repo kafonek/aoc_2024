@@ -1,0 +1,17 @@
+[project]
+name = "aoc_2024"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.uv]
+dev-dependencies = [
+    "pytest-benchmark>=5.1.0",
+    "pytest>=8.3.4",
+]
