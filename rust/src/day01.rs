@@ -1,15 +1,25 @@
 use std::collections::HashMap;
 
-use crate::utils::FromLines;
+use crate::utils::{read_lines, FromLines};
+
+pub fn part1(filename: &str) -> i32 {
+    let data: Day01 = read_lines(filename).unwrap();
+    data.distance()
+}
+
+pub fn part2(filename: &str) -> i32 {
+    let data: Day01 = read_lines(filename).unwrap();
+    data.similarity()
+}
 
 #[derive(Debug)]
-pub struct Day01Part1 {
+pub struct Day01 {
     // both Vectors sorted smallest to largest and should be same length
     left: Vec<i32>,
     right: Vec<i32>,
 }
 
-impl FromLines for Day01Part1 {
+impl FromLines for Day01 {
     fn from_lines<I>(lines: I) -> Self
     where
         I: Iterator<Item = String>,
@@ -28,12 +38,12 @@ impl FromLines for Day01Part1 {
             }
         }
 
-        Day01Part1 { left, right }
+        Day01 { left, right }
     }
 }
 
-impl Day01Part1 {
-    pub fn calculate_distance(&self) -> i32 {
+impl Day01 {
+    pub fn distance(&self) -> i32 {
         let mut left_sorted = self.left.clone();
         let mut right_sorted = self.right.clone();
 
@@ -51,7 +61,7 @@ impl Day01Part1 {
 
     pub fn similarity(&self) -> i32 {
         let mut right_side_counts: HashMap<i32, i32> = HashMap::new();
-        let mut left_side_totals: HashMap<i32, i32> = HashMap::new();
+        let mut total: i32 = 0;
 
         for r in self.right.iter() {
             *right_side_counts.entry(*r).or_insert(0) += 1;
@@ -59,9 +69,9 @@ impl Day01Part1 {
 
         for l in self.left.iter() {
             let val = l * right_side_counts.get(l).unwrap_or(&0);
-            *left_side_totals.entry(*l).or_insert(0) += val;
+            total += val;
         }
 
-        left_side_totals.values().sum()
+        total
     }
 }
