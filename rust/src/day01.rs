@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::utils::FromLines;
 
 #[derive(Debug)]
@@ -45,5 +47,21 @@ impl Day01Part1 {
         }
 
         total_distance
+    }
+
+    pub fn similarity(&self) -> i32 {
+        let mut right_side_counts: HashMap<i32, i32> = HashMap::new();
+        let mut left_side_totals: HashMap<i32, i32> = HashMap::new();
+
+        for r in self.right.iter() {
+            *right_side_counts.entry(*r).or_insert(0) += 1;
+        }
+
+        for l in self.left.iter() {
+            let val = l * right_side_counts.get(l).unwrap_or(&0);
+            *left_side_totals.entry(*l).or_insert(0) += val;
+        }
+
+        left_side_totals.values().sum()
     }
 }
