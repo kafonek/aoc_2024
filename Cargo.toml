@@ -1,16 +1,3 @@
 [workspace]
 members = ["rust"]
 resolver = "2"
-default-member = "rust"
-
-[package]
-name = "aoc_2024_workspace"
-version = "0.1.0"
-edition = "2021"
-
-[[bin]]
-name = "main"
-path = "rust/src/main.rs"
-
-[dependencies]
-aoc_2024 = { path = "rust" }
