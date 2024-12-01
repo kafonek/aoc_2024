@@ -1,3 +1,6 @@
 [workspace]
-members = ["rust"]
+members = ["rust", "pyo3"]
 resolver = "2"
+
+[workspace.dependencies]
+aoc_2024 = { path = "rust" }

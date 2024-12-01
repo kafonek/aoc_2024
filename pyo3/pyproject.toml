@@ -1,0 +1,20 @@
+[project]
+name = "aoc_2024_pyo3"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.maturin]
+module-name = "aoc_2024_pyo3._core"
+python-packages = ["aoc_2024_pyo3"]
+python-source = "src"
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
