@@ -1,5 +1,5 @@
 [workspace]
-members = ["rust", "pyo3"]
+members = ["rust", "pyo3", "wasm"]
 resolver = "2"
 
 [workspace.dependencies]

@@ -7,3 +7,10 @@ This year, I'll be trying to prototype solutions in Rust instead of in Python / 
 ## Regression Tests
 
 One goal this year is to embrace Rust's `fearless refactoring` paradigm. To that end, once code is working I'll add a regression test to `tests/solutions.rs`. Those can be run with `cargo test` from the workspace level.
+
+## WASM
+
+- `cargo install wasm-pack`
+- `cd wasm`
+- `wasm-pack build --target web --out-dir static/pkg`
+- `uv run python -m http.server --directory static`

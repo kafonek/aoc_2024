@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>AoC 2024 WASM</title>
+    <style>
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Advent of Code 2024 - WASM Demo</h1>
+    <textarea id="input" placeholder="Paste your input here..."></textarea>
+    <button onclick="processInput()">Process Input</button>
+    <div id="results"></div>
+
+    <script type="module">
+        import init, { WasmDay01 } from './pkg/aoc_2024_wasm.js';
+
+        window.processInput = async function () {
+            const content = document.getElementById('input').value;
+            const results = document.getElementById('results');
+
+            if (!content.trim()) {
+                results.innerHTML = '<p style="color: red">Please enter some input data</p>';
+                return;
+            }
+
+            try {
+                const day01 = WasmDay01.from_content(content);
+                const result1 = day01.distance();
+                const result2 = day01.similarity();
+
+                results.innerHTML = `
+                    <p>Day 1 Part 1: ${result1}</p>
+                    <p>Day 1 Part 2: ${result2}</p>
+                `;
+            } catch (e) {
+                results.innerHTML = `<p style="color: red">Error: ${e}</p>`;
+            }
+        }
+
+        // Initialize WASM
+        init();
+    </script>
+</body>
+
+</html>
