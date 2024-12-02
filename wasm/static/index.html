@@ -5,26 +5,66 @@
     <meta charset="utf-8">
     <title>AoC 2024 WASM</title>
     <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        select,
+        button {
+            padding: 8px;
+            font-size: 16px;
+        }
+
         textarea {
             width: 100%;
             height: 200px;
             margin: 10px 0;
+            padding: 8px;
+            font-family: monospace;
+        }
+
+        .results {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
     <h1>Advent of Code 2024 - WASM Demo</h1>
+
+    <select id="daySelect">
+        <option value="1">Day 1</option>
+        <option value="2">Day 2</option>
+    </select>
+
     <textarea id="input" placeholder="Paste your input here..."></textarea>
-    <button onclick="processInput()">Process Input</button>
-    <div id="results"></div>
+
+    <div class="controls">
+        <button onclick="processInput()">Process Input</button>
+    </div>
+
+    <div id="results" class="results"></div>
 
     <script type="module">
-        import init, { WasmDay01 } from './pkg/aoc_2024_wasm.js';
+        import init, { WasmDay01, WasmDay02 } from './pkg/aoc_2024_wasm.js';
 
         window.processInput = async function () {
             const content = document.getElementById('input').value;
             const results = document.getElementById('results');
+            const day = document.getElementById('daySelect').value;
 
             if (!content.trim()) {
                 results.innerHTML = '<p style="color: red">Please enter some input data</p>';
@@ -32,13 +72,21 @@
             }
 
             try {
-                const day01 = WasmDay01.from_content(content);
-                const result1 = day01.distance();
-                const result2 = day01.similarity();
+                let result1, result2;
+
+                if (day === "1") {
+                    const solver = WasmDay01.from_content(content);
+                    result1 = solver.distance();
+                    result2 = solver.similarity();
+                } else if (day === "2") {
+                    const solver = WasmDay02.from_content(content);
+                    result1 = solver.count_safe_reports();
+                    result2 = solver.count_safe_reports_with_dampener();
+                }
 
                 results.innerHTML = `
-                    <p>Day 1 Part 1: ${result1}</p>
-                    <p>Day 1 Part 2: ${result2}</p>
+                    <p>Day ${day} Part 1: ${result1}</p>
+                    <p>Day ${day} Part 2: ${result2}</p>
                 `;
             } catch (e) {
                 results.innerHTML = `<p style="color: red">Error: ${e}</p>`;
