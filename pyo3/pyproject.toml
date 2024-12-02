@@ -16,5 +16,6 @@ build-backend = "maturin"
 
 [dependency-groups]
 dev = [
+    "pytest-benchmark>=5.1.0",
     "pytest>=8.3.4",
 ]

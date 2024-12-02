@@ -1,3 +1,3 @@
-from . import day01
+from . import day01, day02
 
-__all__ = ["day01"]
+__all__ = ["day01", "day02"]
