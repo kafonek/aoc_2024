@@ -6,7 +6,19 @@ This year, I'll be trying to prototype solutions in Rust instead of in Python / 
 
 ## Regression Tests
 
-One goal this year is to embrace Rust's `fearless refactoring` paradigm. To that end, once code is working I'll add a regression test to `tests/solutions.rs`. Those can be run with `cargo test` from the workspace level.
+The `rust/`, `python/` and `pyo3/` repos have tests asserting that the solutions are correct, after manually solving them and verifying in the webpage. That enables refactoring with confdience.
+
+ - `rust/`: `cargo test` from the workspace or rust directory
+ - `python/`: `uv run pytest` from the python directory
+ - `pyo3/`: `uv run pytest` from the pyo3 directory
+
+## Benchmarks
+
+I am using the `criterion` crate to benchmark Rust solutions, and `pytest-benchmark` for the pure Python and PyO3 solutions.
+
+ - `rust/`: `cargo bench` from the workspace or rust directory
+ - `python/`: `uv run pytest --benchmark-only` from the python directory
+ - `pyo3/`: `uv run pytest --benchmark-only` from the pyo3 directory
 
 ## WASM
 
