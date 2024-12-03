@@ -8,6 +8,7 @@ name = "timing"
 harness = false
 
 [dependencies]
+regex = "1.11.1"
 
 [dev-dependencies]
 criterion = "0.5.1"
