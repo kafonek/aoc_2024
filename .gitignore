@@ -24,3 +24,5 @@ Cargo.lock
 
 /target
 
+# Really wish I had Jupyter Notebooks (evxcr just doesn't do it for me)
+scratch/
