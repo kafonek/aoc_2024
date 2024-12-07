@@ -1,4 +1,5 @@
 use gridthings::{Cell, Direction, Grid};
+use log::debug;
 use rayon::prelude::*;
 use std::{collections::HashSet, fs::read_to_string};
 
@@ -35,7 +36,7 @@ fn get_next_cell(
 pub fn part1(fname: &str) -> i32 {
     let grid = read(fname);
     let mut cell = grid.iter_cells().find(|c| c.value == '^').unwrap();
-    println!(
+    debug!(
         "start cell (value {}): {}, {}",
         cell.value, cell.col, cell.row
     );
@@ -97,7 +98,7 @@ fn grid_is_looped(grid: &Grid<char>, mut cell: Cell<char>) -> bool {
 pub fn part2(fname: &str) -> i32 {
     let grid = read(fname);
     let start_cell = grid.iter_cells().find(|cell| cell.value == '^').unwrap();
-    println!("start_cell: {:?}", start_cell);
+    debug!("start_cell: {:?}", start_cell);
 
     grid.iter_cells()
         .par_bridge()
