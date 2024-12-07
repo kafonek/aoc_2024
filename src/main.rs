@@ -1,10 +1,10 @@
 use std::time::Instant;
 
-mod day01;
-
 fn main() {
-    let fname = "data/01_sample.txt";
+    env_logger::init();
+
+    let fname = "data/02.txt";
     let t0 = Instant::now();
-    println!("Solution: {}", day01::part1(fname));
+    println!("Solution: {}", aoc_2024::day02::part2(fname));
     println!("Time: {:?}", Instant::now().duration_since(t0));
 }

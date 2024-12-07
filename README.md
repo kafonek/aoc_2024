@@ -13,4 +13,6 @@ For AOC 2023, I explored creating WASM and pyo3 bindings for Rust and benchmarki
 
  - Avoid hard to read multi-line functional calls
  - Avoid lifetimes and high-level abstractions in favor of simplicity, can use liberal `.clone()` if needed
+ - Use logging not print statements while iterating on a solution
+ 
  

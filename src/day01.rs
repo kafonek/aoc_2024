@@ -20,7 +20,6 @@ fn read(fname: &str) -> Result<(Vec<i32>, Vec<i32>)> {
     Ok((left, right))
 }
 
-#[allow(dead_code)]
 pub fn part1(fname: &str) -> i32 {
     let (left, right) = read(fname).unwrap();
 
@@ -31,7 +30,6 @@ pub fn part1(fname: &str) -> i32 {
     total_distance
 }
 
-#[allow(dead_code)]
 pub fn part2(fname: &str) -> i32 {
     let (left, right) = read(fname).unwrap();
 
