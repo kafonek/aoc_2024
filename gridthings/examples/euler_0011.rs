@@ -45,8 +45,8 @@ fn solve() -> i32 {
 
     let mut max_product = 0;
     for cell in grid.iter_cells() {
-        for segment in grid.all_segments(cell.row, cell.col, 4) {
-            let product = segment.iter().product();
+        for segment in grid.all_segments(cell.y, cell.x, 4) {
+            let product = segment.values.iter().product();
             if product > max_product {
                 println!(
                     "Found new max product from cell {:?}. product: {}",

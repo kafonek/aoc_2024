@@ -42,7 +42,7 @@ fn solve() -> i32 {
 
     loop {
         visited.insert(cell.clone());
-        let next_cell = grid.get_cell_neighbor(cell.row, cell.col, direction.clone());
+        let next_cell = grid.get_cell_neighbor(cell.y, cell.x, direction.clone());
 
         if next_cell.is_none() {
             break;

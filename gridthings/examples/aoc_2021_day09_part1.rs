@@ -13,12 +13,7 @@ const INPUT: &str = r#"
 
 fn solve() -> u32 {
     // Parse the input into a grid of u8 digits
-    let data: Vec<Vec<u32>> = INPUT
-        .trim()
-        .lines()
-        .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
-        .collect();
-    let grid = Grid::from_vecs(&data);
+    let grid: Grid<u32> = Grid::from_str(INPUT).unwrap();
     println!(
         "Parsed grid with {} rows and {} columns",
         grid.row_len, grid.col_len
@@ -31,7 +26,7 @@ fn solve() -> u32 {
         let mut is_low_point = true;
 
         // Check all cardinal neighbors (up, right, down, left)
-        for neighbor in grid.get_cell_neighbors(cell.row, cell.col, Direction::cardinal()) {
+        for neighbor in grid.get_cell_neighbors(cell.y, cell.x, Direction::cardinal()) {
             if neighbor.value <= cell.value {
                 is_low_point = false;
                 break;

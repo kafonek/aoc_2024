@@ -18,23 +18,18 @@ MXMXAXMASX
 
 fn solve() -> i32 {
     // Parse the input into a grid
-    let data: Vec<Vec<char>> = INPUT
-        .trim()
-        .lines()
-        .map(|line| line.chars().collect())
-        .collect();
-    let grid = Grid::from_vecs(&data);
+    let grid: Grid<char> = Grid::from_str(INPUT).expect("Failed to parse grid");
 
     let mut xmas_count = 0;
 
     // For each cell in the grid
     for cell in grid.iter_cells() {
         // Get all possible 4-character segments starting from this cell
-        let segments = grid.all_segments(cell.row, cell.col, 4);
+        let segments = grid.all_segments(cell.y, cell.x, 4);
 
         // Check each segment for "XMAS"
         for segment in segments {
-            if segment == vec!['X', 'M', 'A', 'S'] {
+            if segment.values == vec!['X', 'M', 'A', 'S'] {
                 xmas_count += 1;
             }
         }

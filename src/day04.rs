@@ -10,9 +10,9 @@ pub fn part1(fname: &str) -> i32 {
     let grid = read(fname);
     let mut xmas_matches = 0;
     for cell in grid.iter_cells() {
-        let segments = grid.all_segments(cell.row, cell.col, 4);
+        let segments = grid.all_segments(cell.y, cell.x, 4);
         for segment in segments {
-            if segment == vec!['X', 'M', 'A', 'S'] {
+            if segment.values == vec!['X', 'M', 'A', 'S'] {
                 xmas_matches += 1;
             }
         }
@@ -40,7 +40,7 @@ pub fn part2(fname: &str) -> i32 {
     let grid = read(fname);
     let mut xmas_matches = 0;
     for cell in grid.iter_cells() {
-        let subgrid = grid.subgrid(cell.row, cell.col, 3, 3);
+        let subgrid = grid.subgrid(cell.y, cell.x, 3, 3);
         if subgrid.is_none() {
             continue;
         }

@@ -21,7 +21,7 @@ pub fn part1(fname: &str) -> i32 {
 
     loop {
         visited.insert(cell.clone());
-        let next_cell = grid.get_cell_neighbor(cell.row, cell.col, direction.clone());
+        let next_cell = grid.get_cell_neighbor(cell.y, cell.x, direction.clone());
         if next_cell.is_none() {
             break;
         }
@@ -54,7 +54,7 @@ fn grid_is_looped(grid: &Grid<char>, mut cell: Cell<char>) -> bool {
         if visited.contains(&observation) {
             return true;
         }
-        let next_cell = grid.get_cell_neighbor(cell.row, cell.col, direction.clone());
+        let next_cell = grid.get_cell_neighbor(cell.y, cell.x, direction.clone());
         if next_cell.is_none() {
             break;
         }
@@ -80,7 +80,7 @@ pub fn part2(fname: &str) -> i32 {
         .filter_map(|cell| {
             if cell.value == '.' {
                 let mut modified_grid = grid.clone();
-                modified_grid.update_cell_value(cell.row, cell.col, '#');
+                modified_grid.update_cell_value(cell.y, cell.x, '#');
                 grid_is_looped(&modified_grid, start_cell.clone()).then_some(1)
             } else {
                 None

@@ -75,7 +75,7 @@ fn solve() -> u32 {
     for continguous_number in continguous_numbers {
         let mut is_adjacent = false;
         for cell in continguous_number.cells {
-            for neighbor in grid.get_cell_neighbors(cell.row, cell.col, Direction::all()) {
+            for neighbor in grid.get_cell_neighbors(cell.y, cell.x, Direction::all()) {
                 if !neighbor.value.is_digit(10) && neighbor.value != '.' {
                     is_adjacent = true;
                 }

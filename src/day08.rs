@@ -8,7 +8,7 @@ fn read(fname: &str) -> Grid<char> {
     Grid::from_vecs(&data)
 }
 
-fn find_antinodes_part1(grid: &Grid<char>) -> HashSet<(usize, usize)> {
+fn find_antinodes_part1(grid: &Grid<char>) -> HashSet<(i32, i32)> {
     // Group cells by frequency
     let mut freq_map: HashMap<char, Vec<Cell<char>>> = HashMap::new();
     for cell in grid.iter_cells() {
@@ -26,24 +26,26 @@ fn find_antinodes_part1(grid: &Grid<char>) -> HashSet<(usize, usize)> {
         for (i, cell1) in cells.iter().enumerate() {
             for cell2 in cells.iter().skip(i + 1) {
                 // Calculate vector between antennas
-                let row_diff = cell2.row as i32 - cell1.row as i32;
-                let col_diff = cell2.col as i32 - cell1.col as i32;
+                let y_diff = cell2.y - cell1.y;
+                let x_diff = cell2.x - cell1.x;
 
                 // Calculate antinode positions
-                let antinode1 = (
-                    (cell1.row as i32 - row_diff) as usize,
-                    (cell1.col as i32 - col_diff) as usize,
-                );
-                let antinode2 = (
-                    (cell2.row as i32 + row_diff) as usize,
-                    (cell2.col as i32 + col_diff) as usize,
-                );
+                let antinode1 = (cell1.y - y_diff, cell1.x - x_diff);
+                let antinode2 = (cell2.y + y_diff, cell2.x + x_diff);
 
                 // Only add antinodes that are within grid bounds
-                if antinode1.0 < grid.row_len && antinode1.1 < grid.col_len {
+                if antinode1.0 >= 0
+                    && antinode1.1 >= 0
+                    && antinode1.0 < grid.col_len as i32
+                    && antinode1.1 < grid.row_len as i32
+                {
                     antinodes.insert(antinode1);
                 }
-                if antinode2.0 < grid.row_len && antinode2.1 < grid.col_len {
+                if antinode2.0 >= 0
+                    && antinode2.1 >= 0
+                    && antinode2.0 < grid.col_len as i32
+                    && antinode2.1 < grid.row_len as i32
+                {
                     antinodes.insert(antinode2);
                 }
             }
@@ -53,14 +55,10 @@ fn find_antinodes_part1(grid: &Grid<char>) -> HashSet<(usize, usize)> {
     antinodes
 }
 
-fn find_points_on_line(
-    p1: (usize, usize),
-    p2: (usize, usize),
-    grid: &Grid<char>,
-) -> Vec<(usize, usize)> {
+fn find_points_on_line(p1: (i32, i32), p2: (i32, i32), grid: &Grid<char>) -> Vec<(i32, i32)> {
     let mut points = Vec::new();
-    let (x1, y1) = (p1.0 as i32, p1.1 as i32);
-    let (x2, y2) = (p2.0 as i32, p2.1 as i32);
+    let (x1, y1) = p1;
+    let (x2, y2) = p2;
 
     // Calculate differences and steps
     let dx = x2 - x1;
@@ -75,7 +73,7 @@ fn find_points_on_line(
     let mut x = x1;
     let mut y = y1;
     while x >= 0 && y >= 0 && (x as usize) < grid.row_len && (y as usize) < grid.col_len {
-        points.push((x as usize, y as usize));
+        points.push((x, y));
         x -= step_x;
         y -= step_y;
     }
@@ -84,7 +82,7 @@ fn find_points_on_line(
     x = x1 + step_x; // Start from next point since we already added x1,y1
     y = y1 + step_y;
     while x >= 0 && y >= 0 && (x as usize) < grid.row_len && (y as usize) < grid.col_len {
-        points.push((x as usize, y as usize));
+        points.push((x, y));
         x += step_x;
         y += step_y;
     }
@@ -92,7 +90,7 @@ fn find_points_on_line(
     points
 }
 
-fn find_antinodes_part2(grid: &Grid<char>) -> HashSet<(usize, usize)> {
+fn find_antinodes_part2(grid: &Grid<char>) -> HashSet<(i32, i32)> {
     // Group cells by frequency
     let mut freq_map: HashMap<char, Vec<Cell<char>>> = HashMap::new();
     for cell in grid.iter_cells() {
@@ -113,15 +111,14 @@ fn find_antinodes_part2(grid: &Grid<char>) -> HashSet<(usize, usize)> {
 
         // Add all antenna positions as antinodes
         for cell in cells {
-            antinodes.insert((cell.row, cell.col));
+            antinodes.insert((cell.y, cell.x));
         }
 
         // For each pair of cells with same frequency
         for (i, cell1) in cells.iter().enumerate() {
             for cell2 in cells.iter().skip(i + 1) {
                 // Find all points on the line between these antennas
-                let points =
-                    find_points_on_line((cell1.row, cell1.col), (cell2.row, cell2.col), grid);
+                let points = find_points_on_line((cell1.y, cell1.x), (cell2.y, cell2.x), grid);
                 antinodes.extend(points);
             }
         }
