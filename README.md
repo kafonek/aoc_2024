@@ -39,5 +39,8 @@ day06 part1             time:   [470.09 µs 472.87 µs 475.75 µs]
 day06 part2             time:   [115.21 ms 116.44 ms 117.69 ms]                        
 
 day07 part1             time:   [5.0460 ms 5.2199 ms 5.3922 ms]                         
-day07 part2             time:   [50.467 ms 51.372 ms 52.261 ms]    
+day07 part2             time:   [50.467 ms 51.372 ms 52.261 ms]  
+
+day08 part1             time:   [37.466 µs 37.902 µs 38.390 µs]
+day08 part2             time:   [108.28 µs 109.14 µs 110.10 µs]
 ```
