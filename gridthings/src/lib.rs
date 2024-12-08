@@ -38,6 +38,15 @@ impl Direction {
             Direction::DiagonalUpRight,
         ]
     }
+
+    pub fn cardinal() -> Vec<Direction> {
+        vec![
+            Direction::Right,
+            Direction::Down,
+            Direction::Left,
+            Direction::Up,
+        ]
+    }
 }
 
 impl<T: Copy> Grid<T> {
@@ -59,11 +68,8 @@ impl<T: Copy> Grid<T> {
         Some(self.data[row * self.row_len + col])
     }
 
-    pub fn get_mut_value(&mut self, row: usize, col: usize) -> Option<&mut T> {
-        if row >= self.col_len || col >= self.row_len {
-            return None;
-        }
-        Some(&mut self.data[row * self.row_len + col])
+    pub fn update_cell_value(&mut self, row: usize, col: usize, value: T) {
+        self.data[row * self.row_len + col] = value;
     }
 
     pub fn get_cell(&self, row: usize, col: usize) -> Option<Cell<T>> {
@@ -71,17 +77,69 @@ impl<T: Copy> Grid<T> {
             .map(|value| Cell { value, row, col })
     }
 
-    pub fn get_row(&self, row: usize) -> Vec<T> {
-        let start_idx = row * self.row_len;
-        self.data[start_idx..start_idx + self.row_len].to_vec()
+    pub fn iter_cells(&self) -> impl Iterator<Item = Cell<T>> + '_ {
+        (0..self.col_len).flat_map(move |row| {
+            (0..self.row_len).map(move |col| Cell {
+                value: self.get_value(row, col).unwrap(),
+                row,
+                col,
+            })
+        })
     }
 
-    pub fn get_col(&self, col: usize) -> Vec<T> {
-        self.data[col..]
+    pub fn get_cell_neighbor(
+        &self,
+        row: usize,
+        col: usize,
+        direction: Direction,
+    ) -> Option<Cell<T>> {
+        let (y_step, x_step) = match direction {
+            Direction::Up => (-1, 0),
+            Direction::Down => (1, 0),
+            Direction::Left => (0, -1),
+            Direction::Right => (0, 1),
+            Direction::DiagonalUpRight => (-1, 1),
+            Direction::DiagonalDownRight => (1, 1),
+            Direction::DiagonalUpLeft => (-1, -1),
+            Direction::DiagonalDownLeft => (1, -1),
+        };
+
+        // Convert to i32 for signed arithmetic
+        let row = row as i32;
+        let col = col as i32;
+
+        let dst_row = row + y_step;
+        let dst_col = col + x_step;
+
+        // Check for negative values or out of bounds
+        if dst_row < 0 || dst_col < 0 {
+            return None;
+        }
+
+        self.get_cell(dst_row as usize, dst_col as usize)
+    }
+
+    pub fn get_cell_neighbors(
+        &self,
+        row: usize,
+        col: usize,
+        directions: Vec<Direction>,
+    ) -> Vec<Cell<T>> {
+        directions
             .iter()
-            .step_by(self.row_len)
-            .cloned()
+            .map(|direction| self.get_cell_neighbor(row, col, direction.clone()))
+            .filter_map(|cell| cell)
             .collect()
+    }
+
+    pub fn get_row(&self, row: usize) -> Vec<Cell<T>> {
+        (0..self.row_len)
+            .map(|col| self.get_cell(row, col).unwrap())
+            .collect()
+    }
+
+    pub fn iter_rows(&self) -> impl Iterator<Item = Vec<Cell<T>>> + '_ {
+        (0..self.col_len).map(move |row| self.get_row(row))
     }
 
     pub fn get_segment(
@@ -130,16 +188,6 @@ impl<T: Copy> Grid<T> {
             results.push(segment);
         }
         results
-    }
-
-    pub fn iter_cells(&self) -> impl Iterator<Item = Cell<T>> + '_ {
-        (0..self.col_len).flat_map(move |row| {
-            (0..self.row_len).map(move |col| Cell {
-                value: self.get_value(row, col).unwrap(),
-                row,
-                col,
-            })
-        })
     }
 
     pub fn subgrid(&self, row: usize, col: usize, height: usize, width: usize) -> Option<Grid<T>> {
@@ -195,11 +243,55 @@ mod tests {
         assert_eq!(grid.col_len, 3);
     }
 
+    #[test]
+    fn test_update_cell_value() {
+        let mut grid = make_i32_grid();
+        assert_eq!(grid.get_value(0, 0), Some(1));
+        grid.update_cell_value(0, 0, 10);
+        assert_eq!(grid.get_value(0, 0), Some(10));
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn test_get_neighbors() {
+        let grid = make_i32_grid();
+        assert_eq!(
+            grid.get_cell_neighbors(0, 0, Direction::all()),
+            vec![
+                Cell { value: 2, row: 0, col: 1 },
+                Cell { value: 5, row: 1, col: 1 },
+                Cell { value: 4, row: 1, col: 0 }
+            ]
+        );
+
+        assert_eq!(
+            grid.get_cell_neighbors(0, 0, Direction::cardinal()),
+            vec![
+                Cell { value: 2, row: 0, col: 1 },
+                Cell { value: 4, row: 1, col: 0 }
+            ]
+        );
+    }
+
+    #[test]
+    fn test_iter_rows() {
+        let grid = make_i32_grid();
+        let rows = grid.iter_rows().collect::<Vec<_>>();
+        assert_eq!(rows.len(), 3);
+        assert_eq!(
+            rows[0][0],
+            Cell {
+                value: 1,
+                row: 0,
+                col: 0
+            }
+        );
+    }
+
     #[rustfmt::skip]
     #[test]
     fn test_get_segment() {
         let grid = make_i32_grid();
-        #[rustfmt::skip]
         assert_eq!(grid.get_segment(1, 1, Direction::Up, 1), Some(vec![5]));
         assert_eq!(grid.get_segment(1, 1, Direction::Up, 2), Some(vec![5, 2]));
         assert_eq!(grid.get_segment(1, 1, Direction::Up, 3), None);

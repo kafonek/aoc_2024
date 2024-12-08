@@ -9,45 +9,19 @@ fn read(fname: &str) -> Grid<char> {
     Grid::from_vecs(&data)
 }
 
-const DIRECTIONS: [Direction; 4] = [
-    Direction::Up,
-    Direction::Right,
-    Direction::Down,
-    Direction::Left,
-];
-
-fn get_next_cell(
-    grid: &Grid<char>,
-    cell: &Cell<char>,
-    direction: &Direction,
-) -> Option<Cell<char>> {
-    match direction {
-        // get_cell takes usize so need to check if we're having x or y go to negative here...
-        Direction::Up if cell.row == 0 => None,
-        Direction::Left if cell.col == 0 => None,
-        Direction::Up => grid.get_cell(cell.row - 1, cell.col),
-        Direction::Right => grid.get_cell(cell.row, cell.col + 1),
-        Direction::Down => grid.get_cell(cell.row + 1, cell.col),
-        Direction::Left => grid.get_cell(cell.row, cell.col - 1),
-        _ => unreachable!(),
-    }
-}
-
 pub fn part1(fname: &str) -> i32 {
     let grid = read(fname);
     let mut cell = grid.iter_cells().find(|c| c.value == '^').unwrap();
-    debug!(
-        "start cell (value {}): {}, {}",
-        cell.value, cell.col, cell.row
-    );
+    debug!("start cell: {:?}", cell);
 
     let mut visited = HashSet::new();
-    let mut directions = DIRECTIONS.iter().cycle();
+    // Skip to make Up the first direction
+    let mut directions = Direction::cardinal().into_iter().cycle().skip(3);
     let mut direction = directions.next().unwrap();
 
     loop {
         visited.insert(cell.clone());
-        let next_cell = get_next_cell(&grid, &cell, &direction);
+        let next_cell = grid.get_cell_neighbor(cell.row, cell.col, direction.clone());
         if next_cell.is_none() {
             break;
         }
@@ -68,7 +42,8 @@ struct Observation {
 
 fn grid_is_looped(grid: &Grid<char>, mut cell: Cell<char>) -> bool {
     let mut visited = HashSet::new();
-    let mut directions = DIRECTIONS.iter().cycle();
+    // Skip to make Up the first direction
+    let mut directions = Direction::cardinal().into_iter().cycle().skip(3);
     let mut direction = directions.next().unwrap();
 
     loop {
@@ -79,7 +54,7 @@ fn grid_is_looped(grid: &Grid<char>, mut cell: Cell<char>) -> bool {
         if visited.contains(&observation) {
             return true;
         }
-        let next_cell = get_next_cell(&grid, &cell, &direction);
+        let next_cell = grid.get_cell_neighbor(cell.row, cell.col, direction.clone());
         if next_cell.is_none() {
             break;
         }
@@ -105,7 +80,7 @@ pub fn part2(fname: &str) -> i32 {
         .filter_map(|cell| {
             if cell.value == '.' {
                 let mut modified_grid = grid.clone();
-                *modified_grid.get_mut_value(cell.row, cell.col).unwrap() = '#';
+                modified_grid.update_cell_value(cell.row, cell.col, '#');
                 grid_is_looped(&modified_grid, start_cell.clone()).then_some(1)
             } else {
                 None
