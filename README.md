@@ -43,4 +43,7 @@ day07 part2             time:   [50.467 ms 51.372 ms 52.261 ms]
 
 day08 part1             time:   [37.466 µs 37.902 µs 38.390 µs]
 day08 part2             time:   [108.28 µs 109.14 µs 110.10 µs]
+
+day09 part1             time:   [692.10 ms 695.10 ms 698.91 ms]
+day09 part2             time:   [1.2898 s 1.2934 s 1.2979 s]
 ```
