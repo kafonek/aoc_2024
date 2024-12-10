@@ -1,4 +1,4 @@
-use aoc_2024::{day01, day02, day03, day04, day05, day06, day07, day08, day09};
+use aoc_2024::{day01, day02, day03, day04, day05, day06, day07, day08, day09, day10};
 
 use criterion::{criterion_group, criterion_main, Criterion};
 
@@ -21,6 +21,8 @@ fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("day08 part2", |b| b.iter(|| day08::part2("data/08.txt")));
     c.bench_function("day09 part1", |b| b.iter(|| day09::part1("data/09.txt")));
     c.bench_function("day09 part2", |b| b.iter(|| day09::part2("data/09.txt")));
+    c.bench_function("day10 part1", |b| b.iter(|| day10::part1("data/10.txt")));
+    c.bench_function("day10 part2", |b| b.iter(|| day10::part2("data/10.txt")));
 }
 
 criterion_group!(benches, criterion_benchmark);
